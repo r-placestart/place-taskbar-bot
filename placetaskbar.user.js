@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         PlaceTaskbar Bot
-// @namespace    https://github.com/Gugubo/place-taskbar-bot
+// @namespace    https://github.com/r-placestart/place-taskbar-bot
 // @version      14
 // @description  /r/place bot
 // @author       NoahvdAa, reckter, SgtChrome, nama17, Gugubo
@@ -9,8 +9,8 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=reddit.com
 // @require	     https://cdn.jsdelivr.net/npm/toastify-js
 // @resource     TOASTIFY_CSS https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css
-// @updateURL    https://github.com/Gugubo/place-taskbar-bot/raw/main/placetaskbar.user.js
-// @downloadURL  https://github.com/Gugubo/place-taskbar-bot/raw/main/placetaskbar.user.js
+// @updateURL    https://github.com/r-placestart/place-taskbar-bot/raw/main/placetaskbar.user.js
+// @downloadURL  https://github.com/r-placestart/place-taskbar-bot/raw/main/placetaskbar.user.js
 // @grant        GM_getResourceText
 // @grant        GM_addStyle
 // ==/UserScript==
@@ -162,7 +162,7 @@ async function attemptPlace() {
 }
 
 function updateOrders() {
-	fetch(`https://raw.githubusercontent.com/Gugubo/place-taskbar-bot/main/pixel.json`, { cache: "no-store" }).then(async (response) => {
+	fetch(`https://raw.githubusercontent.com/r-placestart/place-taskbar-bot/main/pixel.json`, { cache: "no-store" }).then(async (response) => {
 		if (!response.ok) return console.warn('Could not load orders!');
 		const data = await response.json();
 
@@ -181,11 +181,11 @@ function updateOrders() {
 		if (data?.version !== VERSION && !UPDATE_PENDING) {
 			UPDATE_PENDING = true
 			Toastify({
-				text: `NEW VERSION AVAILABLE! Update here: https://github.com/Gugubo/place-taskbar-bot`,
+				text: `NEW VERSION AVAILABLE! Update here: https://github.com/r-placestart/place-taskbar-bot`,
 				duration: -1,
 				onClick: () => {
 					// Tapermonkey captures this and opens a new tab
-					window.location = 'https://github.com/Gugubo/place-taskbar-bot/raw/main/placetaskbar.user.js'
+					window.location = 'https://github.com/r-placestart/place-taskbar-bot/raw/main/placetaskbar.user.js'
 				}
 			}).showToast();
 
