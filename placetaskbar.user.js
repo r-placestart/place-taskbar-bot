@@ -97,7 +97,6 @@ async function attemptPlace() {
 		ctx = await getCanvasFromUrl(await getCurrentImageUrl('1'), canvas, 1000, 0)
 	} catch (e) {
 		console.warn('Error accessing canvas:', e);
-        console.log(e.getMessage());
 		Toastify({
 			text: 'Error accessing canvas. Trying again in 15 seconds...',
 			duration: 10000
