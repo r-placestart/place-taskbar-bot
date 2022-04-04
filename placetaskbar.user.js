@@ -13,6 +13,7 @@
 // @downloadURL  https://github.com/r-placestart/place-taskbar-bot/raw/main/placetaskbar.user.js
 // @grant        GM_getResourceText
 // @grant        GM_addStyle
+// @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
 // Sorry voor de rommelige code, haast en clean gaatn iet altijd samen ;)
@@ -96,6 +97,7 @@ async function attemptPlace() {
 		ctx = await getCanvasFromUrl(await getCurrentImageUrl('1'), canvas, 1000, 0)
 	} catch (e) {
 		console.warn('Error accessing canvas:', e);
+        console.log(e.getMessage());
 		Toastify({
 			text: 'Error accessing canvas. Trying again in 15 seconds...',
 			duration: 10000
@@ -215,7 +217,7 @@ async function place(x, y, color) {
 							'y': y % 1000
 						},
 						'colorIndex': color,
-						'canvasIndex': (x > 999 ? 1 : 0)
+						'canvasIndex': (y > 999 ? (x > 999 ? 3 : 2) : (x > 999 ? 1 : 0))
 					}
 				}
 			},
@@ -341,13 +343,24 @@ function getCanvasFromUrl(url, canvas, x = 0, y = 0) {
 	return new Promise((resolve, reject) => {
 		var ctx = canvas.getContext('2d');
 		var img = new Image();
-		img.crossOrigin = 'anonymous';
-		img.onload = () => {
-			ctx.drawImage(img, x, y);
-			resolve(ctx);
-		};
-		img.onerror = reject;
-		img.src = url;
+
+        /*
+        * use GM_xmlhttpRequest to bypass CORS, then load that blob into an Image().
+        */
+
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: url,
+            responseType: 'blob',
+            onload: (res) => {
+                img.onload = () => {
+                    ctx.drawImage(img, x, y);
+                    resolve(ctx);
+                };
+                img.onerror = reject;
+                img.src = window.URL.createObjectURL(res.response);
+            }
+        });
 	});
 }
 
